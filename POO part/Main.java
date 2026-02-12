@@ -2,29 +2,23 @@
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("--- Iniciando Sistema de Viagens ---");
+        // Criando a estrutura
+        Motorista m1 = new Motorista(1, "Carlos");
+        Onibus o1 = new Onibus("ABC-1234", m1);
+        Viagem v1 = new Viagem(10, "São Paulo", "4h", o1);
 
-        // 1. Criar o Motorista
-        Motorista mot = new Motorista(1, "Carlos Silva");
+        // Criando passageiros para a mesma viagem
+        Passageiro p1 = new Passageiro(101, "Alice", 25);
+        Passageiro p2 = new Passageiro(102, "Bob", 30);
 
-        // 2. Criar o Ônibus (precisa do Motorista)
-        Onibus onibus = new Onibus("XYZ-9999", mot);
+        // Vendendo bilhetes (Sem precisar repetir o destino!)
+        Bilhete b1 = new Bilhete(1, 150.0, v1, p1);
+        Bilhete b2 = new Bilhete(2, 150.0, v1, p2);
 
-        // 3. Criar a Viagem (precisa do Ônibus)
-        Viagem viagem = new Viagem(100, "São Paulo", "4h30", onibus);
-
-        // 4. Criar o Passageiro
-        Passageiro pass = new Passageiro(50, "Ana Souza", 28);
-
-        // 5. Gerar o Bilhete (precisa da Viagem e do Passageiro)
-        Bilhete bilhete = new Bilhete(1234, 85.90, "São Paulo", viagem, pass);
-
-        // --- Testando as saídas ---
-        System.out.println("\nResumo da Operação:");
-        System.out.println("Motorista: " + onibus.getMotorista().getNome());
-        System.out.println("Ônibus: " + onibus.getPlacaOnibus());
-        System.out.println("Passageiro: " + pass.getNome());
-        System.out.println("Viagem Destino: " + viagem.getDestino());
-        System.out.println("Dados do Bilhete: " + bilhete.toString());
+        System.out.println("--- Sistema de Transporte ---");
+        System.out.println("Viagem para: " + v1.getDestino());
+        System.out.println("Passageiros confirmados: " + v1.getBilhetes().size());
+        System.out.println("Detalhe do Passageiro 1: " + p1.getNome() + " - " + b1.toString());
+        System.out.println("Detalhe do Passageiro 2: " + p2.getNome() + " - " + b2.toString());
     }
 }
