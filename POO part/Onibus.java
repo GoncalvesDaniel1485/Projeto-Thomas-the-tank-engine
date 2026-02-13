@@ -1,24 +1,22 @@
-
 import java.util.ArrayList;
-import java.util.List;
 
-public class Onibus {
-
+public class Onibus{
     private String placaOnibus;
     private Motorista motorista;
-    private List<Viagem> viagens = new ArrayList<>();
+    private ArrayList<Viagem> viagens;
 
-    public Onibus(String placaOnibus, Motorista motorista) {
-        this.placaOnibus = placaOnibus;
-        this.motorista = motorista;
-        motorista.adicionarOnibus(this);
+public Onibus(String placaOnibus, Motorista motorista){
+    this.placaOnibus = placaOnibus;
+    this.motorista = motorista;
+    motorista.adicionarOnibus(this);
+    viagens = new ArrayList<>();
     }
 
-    public void adicionarViagem(Viagem viagem) {
-        this.viagens.add(viagem);
+public void adicionarViagem(Viagem viagem){
+    this.viagens.add(viagem);
     }
 
-    public String getPlacaOnibus() {
-        return placaOnibus;
+public String getPlacaOnibus(){
+    return placaOnibus;
     }
 }
