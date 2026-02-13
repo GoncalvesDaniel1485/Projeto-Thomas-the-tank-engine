@@ -1,34 +1,31 @@
-
 import java.util.ArrayList;
-import java.util.List;
 
-public class Viagem {
+public class Viagem{
 
     private int idViagem;
     private String destino;
     private String tempo;
     private Onibus onibus;
-    // Uma viagem agora tem uma lista de bilhetes (vários passageiros no ônibus)
-    private List<Bilhete> bilhetes = new ArrayList<>();
+    private ArrayList<Bilhete> bilhetes;
 
-    public Viagem(int idViagem, String destino, String tempo, Onibus onibus) {
+    public Viagem(int idViagem, String destino, String tempo, Onibus onibus){
         this.idViagem = idViagem;
         this.destino = destino;
         this.tempo = tempo;
         this.onibus = onibus;
         onibus.adicionarViagem(this);
+        bilhetes = new ArrayList<>();
     }
 
-    public void registrarBilhete(Bilhete bilhete) {
+    public void registrarBilhete(Bilhete bilhete){
         this.bilhetes.add(bilhete);
     }
 
-    public String getDestino() {
+    public String getDestino(){
         return destino;
     }
 
-    public List<Bilhete> getBilhetes() {
+    public ArrayList<Bilhete> getBilhetes(){
         return bilhetes;
     }
 }
-
