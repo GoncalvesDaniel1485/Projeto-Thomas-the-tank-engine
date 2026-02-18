@@ -1,0 +1,45 @@
+DROP TABLE IF EXISTS bilhete CASCADE;
+DROP TABLE IF EXISTS passageiro CASCADE;
+DROP TABLE IF EXISTS viagem CASCADE;
+DROP TABLE IF EXISTS onibus CASCADE;
+DROP TABLE IF EXISTS motorista CASCADE;
+
+CREATE TABLE motorista (
+    id_motorista INT PRIMARY KEY,
+    nome VARCHAR(100)
+);
+
+CREATE TABLE onibus (
+    placa_onibus VARCHAR(10) PRIMARY KEY, -- Nome exato: placa_onibus
+    id_motorista INT REFERENCES motorista(id_motorista)
+);
+
+CREATE TABLE viagem (
+    id_viagem INT PRIMARY KEY,
+    destino VARCHAR(100),
+    preco DECIMAL(10,2),
+    placa_onibus VARCHAR(10) REFERENCES onibus(placa_onibus)
+);
+
+CREATE TABLE passageiro (
+    id_passageiro INT PRIMARY KEY,
+    nome VARCHAR(100),
+    idade INT
+);
+
+CREATE TABLE bilhete (
+    id_bilhete INT PRIMARY KEY,
+    valor_pago DECIMAL(10,2),
+    id_viagem INT REFERENCES viagem(id_viagem),
+    id_passageiro INT
+);
+TRUNCATE TABLE bilhete, passageiro,viagem, onibus, motorista CASCADE;
+
+SELECT * FROM motorista;
+SELECT * FROM onibus;
+SELECT * FROM viagem;
+SELECT * FROM passageiro;
+SELECT * FROM bilhete;
+
+
+	
