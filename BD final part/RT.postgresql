@@ -1,45 +1,33 @@
-DROP TABLE IF EXISTS bilhete CASCADE;
-DROP TABLE IF EXISTS passageiro CASCADE;
-DROP TABLE IF EXISTS viagem CASCADE;
-DROP TABLE IF EXISTS onibus CASCADE;
-DROP TABLE IF EXISTS motorista CASCADE;
-
 CREATE TABLE motorista (
     id_motorista INT PRIMARY KEY,
-    nome VARCHAR(100)
+    nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE onibus (
-    placa_onibus VARCHAR(10) PRIMARY KEY, -- Nome exato: placa_onibus
-    id_motorista INT REFERENCES motorista(id_motorista)
-);
-
-CREATE TABLE viagem (
-    id_viagem INT PRIMARY KEY,
-    destino VARCHAR(100),
-    preco DECIMAL(10,2),
-    placa_onibus VARCHAR(10) REFERENCES onibus(placa_onibus)
-);
-
-CREATE TABLE passageiro (
+CREATE TABLE Passageiro (
     id_passageiro INT PRIMARY KEY,
-    nome VARCHAR(100),
-    idade INT
+    nome VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE bilhete (
-    id_bilhete INT PRIMARY KEY,
-    valor_pago DECIMAL(10,2),
-    id_viagem INT REFERENCES viagem(id_viagem),
-    id_passageiro INT
+CREATE TABLE Onibus (
+    placa_onibus VARCHAR(10) PRIMARY KEY,
+    id_motorista INT,
+    CONSTRAINT fk_motorista FOREIGN KEY (id_motorista) REFERENCES motorista(id_motorista)
 );
-TRUNCATE TABLE bilhete, passageiro,viagem, onibus, motorista CASCADE;
 
-SELECT * FROM motorista;
-SELECT * FROM onibus;
-SELECT * FROM viagem;
-SELECT * FROM passageiro;
-SELECT * FROM bilhete;
+CREATE TABLE Viagem (
+    id_viagem INT PRIMARY KEY,
+    origem VARCHAR(100) DEFAULT 'Rodoviária RT',
+    destino VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    placa_onibus VARCHAR(10),
+    CONSTRAINT fk_onibus FOREIGN KEY (placa_onibus) REFERENCES Onibus(placa_onibus)
+);
 
-
-	
+CREATE TABLE Bilhete (
+    idBilhete INT PRIMARY KEY,
+    valorPago DECIMAL(10,2) NOT NULL,
+    id_viagem INT,
+    id_passageiro INT,
+    CONSTRAINT fk_viagem FOREIGN KEY (id_viagem) REFERENCES Viagem(id_viagem),
+    CONSTRAINT fk_passageiro FOREIGN KEY (id_passageiro) REFERENCES Passageiro(id_passageiro)
+);
