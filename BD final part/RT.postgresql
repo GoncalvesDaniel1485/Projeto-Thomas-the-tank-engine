@@ -31,3 +31,17 @@ CREATE TABLE Bilhete (
     CONSTRAINT fk_viagem FOREIGN KEY (id_viagem) REFERENCES Viagem(id_viagem),
     CONSTRAINT fk_passageiro FOREIGN KEY (id_passageiro) REFERENCES Passageiro(id_passageiro)
 );
+
+SELECT 
+    b.idBilhete AS "ID Bilhete",
+    p.nome AS "Passageiro",
+    v.origem AS "Origem",
+    v.destino AS "Destino",
+    v.preco AS "Preço da Viagem",
+    o.placa_onibus AS "Placa do Ônibus",
+    m.nome AS "Motorista"
+FROM Bilhete b
+INNER JOIN Passageiro p ON b.id_passageiro = p.id_passageiro
+INNER JOIN Viagem v ON b.id_viagem = v.id_viagem
+INNER JOIN Onibus o ON v.placa_onibus = o.placa_onibus
+INNER JOIN motorista m ON o.id_motorista = m.id_motorista;
