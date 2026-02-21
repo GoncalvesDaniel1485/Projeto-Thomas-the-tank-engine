@@ -31,4 +31,9 @@ public class Viagem {
     public Onibus getOnibus() {
         return onibus;
     }
+
+    @Override
+    public String toString() {
+        return "Viagem [ID: " + idViagem + " | " + getDetalhes() + " | Preço: R$" + preco + "]";
+    }
 }

@@ -20,4 +20,9 @@ public class Motorista {
         return nome;
     }
 
+    @Override
+    public String toString() {
+        return "Motorista [ID: " + idMotorista + ", Nome: " + nome + "]";
+    }
+
 }

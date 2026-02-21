@@ -15,4 +15,9 @@ public class Onibus {
     public Motorista getMotorista() {
         return motorista;
     }
+
+    @Override
+    public String toString() {
+        return "Onibus [Placa: " + placa_onibus + ", Motorista: " + (motorista != null ? motorista.getNome() : "N/A") + "]";
+    }
 }

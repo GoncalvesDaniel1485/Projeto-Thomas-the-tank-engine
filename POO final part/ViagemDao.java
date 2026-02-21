@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ViagemDao {
 
@@ -52,5 +55,28 @@ public class ViagemDao {
             System.out.println("Viagem removida.");
         } catch (SQLException e) { e.printStackTrace(); }
     }
-    
+
+    public List<Viagem> listarV() {
+        List<Viagem> lista = new LinkedList<>();
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conexao = null;
+        try {
+            conexao = postgres.getConection();
+            stmt = conexao.prepareStatement("SELECT * FROM Viagem");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                // Criamos um objeto Onibus "vazio" apenas com a placa para preencher a viagem
+                Onibus o = new Onibus(rs.getString("placa_onibus"), null);
+                lista.add(new Viagem(rs.getInt("id_viagem"), rs.getString("destino"), rs.getDouble("preco"), o));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            postgres.close(rs, stmt, conexao);
+        }
+        return lista;
+    }
+
 }

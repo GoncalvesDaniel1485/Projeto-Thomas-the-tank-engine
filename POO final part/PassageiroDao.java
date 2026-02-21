@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PassageiroDao {
 
@@ -39,5 +42,25 @@ public class PassageiroDao {
             System.out.println("Passageiro removido.");
         } catch (SQLException e) { e.printStackTrace(); }
     }
-    
+
+    public List<Passageiro> listarP() {
+        List<Passageiro> lista = new LinkedList<>();
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conexao = null;
+        try {
+            conexao = postgres.getConection();
+            stmt = conexao.prepareStatement("SELECT * FROM Passageiro ORDER BY id_passageiro");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                lista.add(new Passageiro(rs.getInt("id_passageiro"), rs.getString("nome")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            postgres.close(rs, stmt, conexao);
+        }
+        return lista;
+    }
 }

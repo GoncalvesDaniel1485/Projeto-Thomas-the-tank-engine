@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BilheteDao {
 
@@ -36,5 +39,36 @@ public class BilheteDao {
             System.out.println("Bilhete removido.");
         } catch (SQLException e) { e.printStackTrace(); }
     }
-    
+
+    public List<Bilhete> listarB() {
+        List<Bilhete> lista = new LinkedList<>();
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conexao = null;
+        try {
+            conexao = postgres.getConection();
+            //inner_join_para_encontrar_dadossssssssssssssssssssssss
+            String sql = "SELECT b.*, p.nome, v.destino, v.preco " +
+                        "FROM Bilhete b " +
+                        "INNER JOIN Passageiro p ON b.id_passageiro = p.id_passageiro " +
+                        "INNER JOIN Viagem v ON b.id_viagem = v.id_viagem";
+            
+            stmt = conexao.prepareStatement(sql);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Passageiro p = new Passageiro(rs.getInt("id_passageiro"), rs.getString("nome"));
+                Viagem v = new Viagem(rs.getInt("id_viagem"), rs.getString("destino"), rs.getDouble("preco"), null);
+                Bilhete b = new Bilhete(rs.getInt("idBilhete"), v, p);
+                lista.add(b);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            postgres.close(rs, stmt, conexao);
+        }
+        return lista;
+    }
 }

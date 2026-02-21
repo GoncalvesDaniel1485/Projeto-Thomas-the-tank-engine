@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class OnibusDao {
     
@@ -35,5 +38,28 @@ public class OnibusDao {
             stmt.executeUpdate();
             System.out.println("Ônibus removido.");
         } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public List<Onibus> listarO() {
+        List<Onibus> lista = new LinkedList<>();
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conexao = null;
+        try {
+            conexao = postgres.getConection();
+            // Fazemos um JOIN para pegar o nome do motorista também
+            stmt = conexao.prepareStatement("SELECT o.*, m.nome FROM Onibus o INNER JOIN motorista m ON o.id_motorista = m.id_motorista");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Motorista m = new Motorista(rs.getInt("id_motorista"), rs.getString("nome"));
+                lista.add(new Onibus(rs.getString("placa_onibus"), m));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            postgres.close(rs, stmt, conexao);
+        }
+        return lista;
     }
 }
