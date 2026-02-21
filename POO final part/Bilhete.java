@@ -9,8 +9,6 @@ public class Bilhete {
         this.viagem = viagem;
         this.passageiro = passageiro;
         this.valorPago = viagem.getPreco();
-        passageiro.adicionarBilhete(this);
-        viagem.registrarBilhete(this);
     }
 
     public double getValorPago() {
