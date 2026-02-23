@@ -14,13 +14,13 @@ public class ViagemDao {
 
         try {
             conexao = postgres.getConection();
-            
+
             // O SQL deve refletir as colunas da tabela Viagem
             // id_viagem (PK), origem, destino, preco, placa_onibus (FK)
             String sql = "INSERT INTO Viagem (id_viagem, origem, destino, preco, placa_onibus) VALUES (?, ?, ?, ?, ?)";
-            
+
             stmt = conexao.prepareStatement(sql);
-            
+
             // 1. Atributos diretos da classe Viagem
             stmt.setInt(1, viagem.getIdViagem());
             stmt.setString(2, "Rodoviária RT"); // Valor padrão definido na sua classe
@@ -32,7 +32,8 @@ public class ViagemDao {
             if (viagem.getOnibus() != null) {
                 stmt.setString(5, viagem.getOnibus().getPlacaOnibus());
             } else {
-                // Caso a viagem seja criada sem um ônibus definido (opcional, dependendo da sua regra)
+                // Caso a viagem seja criada sem um ônibus definido (opcional, dependendo da sua
+                // regra)
                 stmt.setNull(5, java.sql.Types.VARCHAR);
             }
 
@@ -49,11 +50,13 @@ public class ViagemDao {
     public void removerV(int idViagem) {
         ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
         try (Connection conexao = postgres.getConection();
-            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Viagem WHERE id_viagem = ?")) {
+                PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Viagem WHERE id_viagem = ?")) {
             stmt.setInt(1, idViagem);
             stmt.executeUpdate();
             System.out.println("Viagem removida.");
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Viagem> listarV() {
@@ -79,4 +82,28 @@ public class ViagemDao {
         return lista;
     }
 
+    public void atualizarV(int idViagem, String novoDestino, double novoPreco) {
+
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+        String sql = "UPDATE Viagem SET destino = ?, preco = ? WHERE id_viagem = ?";
+
+        try (Connection conexao = postgres.getConection();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, novoDestino);
+            stmt.setDouble(2, novoPreco);
+            stmt.setInt(3, idViagem);
+
+            int linhas = stmt.executeUpdate();
+
+            if (linhas > 0) {
+                System.out.println("Viagem atualizada com sucesso!");
+            } else {
+                System.out.println("Viagem não encontrada.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar viagem: " + e.getMessage());
+        }
+    }
 }

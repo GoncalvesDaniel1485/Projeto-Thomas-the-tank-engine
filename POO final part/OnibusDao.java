@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class OnibusDao {
-    
+
     public void adicionarO(Onibus onibus) {
         ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
         PreparedStatement stmt = null;
@@ -14,7 +14,10 @@ public class OnibusDao {
 
         try {
             conexao = postgres.getConection();
-
+            if (onibus.getMotorista() == null) {
+                System.out.println("Motorista não pode ser null.");
+                return;
+            }
             String sql = "INSERT INTO Onibus (placa_onibus, id_motorista) VALUES (?, ?)";
             stmt = conexao.prepareStatement(sql);
 
@@ -33,11 +36,13 @@ public class OnibusDao {
     public void removerO(String placa) {
         ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
         try (Connection conexao = postgres.getConection();
-            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Onibus WHERE placa_onibus = ?")) {
+                PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Onibus WHERE placa_onibus = ?")) {
             stmt.setString(1, placa);
             stmt.executeUpdate();
             System.out.println("Ônibus removido.");
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Onibus> listarO() {
@@ -49,7 +54,8 @@ public class OnibusDao {
         try {
             conexao = postgres.getConection();
             // Fazemos um JOIN para pegar o nome do motorista também
-            stmt = conexao.prepareStatement("SELECT o.*, m.nome FROM Onibus o INNER JOIN motorista m ON o.id_motorista = m.id_motorista");
+            stmt = conexao.prepareStatement(
+                    "SELECT o.*, m.nome FROM Onibus o INNER JOIN motorista m ON o.id_motorista = m.id_motorista");
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Motorista m = new Motorista(rs.getInt("id_motorista"), rs.getString("nome"));
@@ -62,4 +68,26 @@ public class OnibusDao {
         }
         return lista;
     }
+
+    public void atualizarO(String placaAntiga, String novaPlaca, int novoMotoristaId) {
+
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+
+        String sql = "UPDATE Onibus SET placa_onibus = ?, id_motorista = ? WHERE placa_onibus = ?";
+
+        try (Connection conexao = postgres.getConection();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, novaPlaca);
+            stmt.setInt(2, novoMotoristaId);
+            stmt.setString(3, placaAntiga);
+
+            stmt.executeUpdate();
+            System.out.println("Ônibus atualizado com sucesso!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

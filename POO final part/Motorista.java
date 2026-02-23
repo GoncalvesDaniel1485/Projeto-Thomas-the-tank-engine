@@ -1,5 +1,4 @@
 
-
 public class Motorista {
 
     private int idMotorista;

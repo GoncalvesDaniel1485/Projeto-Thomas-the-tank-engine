@@ -17,7 +17,7 @@ public class PassageiroDao {
             conexao = postgres.getConection();
             // SQL focado apenas nos atributos básicos da classe
             String sql = "INSERT INTO Passageiro (id_passageiro, nome) VALUES (?, ?)";
-            
+
             stmt = conexao.prepareStatement(sql);
             stmt.setInt(1, passageiro.getIdPassageiro());
             stmt.setString(2, passageiro.getNome());
@@ -36,11 +36,13 @@ public class PassageiroDao {
     public void removerP(int idPassageiro) {
         ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
         try (Connection conexao = postgres.getConection();
-            PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Passageiro WHERE id_passageiro = ?")) {
+                PreparedStatement stmt = conexao.prepareStatement("DELETE FROM Passageiro WHERE id_passageiro = ?")) {
             stmt.setInt(1, idPassageiro);
             stmt.executeUpdate();
             System.out.println("Passageiro removido.");
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Passageiro> listarP() {
@@ -62,5 +64,30 @@ public class PassageiroDao {
             postgres.close(rs, stmt, conexao);
         }
         return lista;
+    }
+
+    public void atualizarP(int idPassageiro, String novoNome) {
+
+        ConnectionPostgreSQL postgres = new ConnectionPostgreSQL();
+
+        String sql = "UPDATE Passageiro SET nome = ? WHERE id_passageiro = ?";
+
+        try (Connection conexao = postgres.getConection();
+                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, novoNome);
+            stmt.setInt(2, idPassageiro);
+
+            int linhas = stmt.executeUpdate();
+
+            if (linhas > 0) {
+                System.out.println("Passageiro atualizado com sucesso!");
+            } else {
+                System.out.println("Passageiro não encontrado.");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar passageiro: " + e.getMessage());
+        }
     }
 }

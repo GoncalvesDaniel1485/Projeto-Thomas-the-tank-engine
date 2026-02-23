@@ -18,6 +18,7 @@ public class Onibus {
 
     @Override
     public String toString() {
-        return "Onibus [Placa: " + placa_onibus + ", Motorista: " + (motorista != null ? motorista.getNome() : "N/A") + "]";
+        return "Onibus [Placa: " + placa_onibus + ", Motorista: " + (motorista != null ? motorista.getNome() : "N/A")
+                + "]";
     }
 }

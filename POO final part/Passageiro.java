@@ -14,7 +14,7 @@ public class Passageiro {
     public int getIdPassageiro() {
         return idPassageiro;
     }
-    
+
     @Override
     public String toString() {
         return "Passageiro [ID: " + idPassageiro + ", Nome: " + nome + "]";

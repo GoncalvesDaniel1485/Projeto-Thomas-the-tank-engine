@@ -17,9 +17,10 @@ public class Bilhete {
 
     @Override
     public String toString() {
-        return "Bilhete [ID: " + idBilhete + " | Passageiro: " + (passageiro != null ? passageiro.getNome() : "N/A") + " | Valor: R$" + valorPago + "]";
+        return "Bilhete [ID: " + idBilhete + " | Passageiro: " + (passageiro != null ? passageiro.getNome() : "N/A")
+                + " | Valor: R$" + valorPago + "]";
     }
-    
+
     public Passageiro getPassageiro() {
         return passageiro;
     }
